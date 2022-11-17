@@ -35,7 +35,7 @@ public class CausaController {
     }
  
  @GetMapping ("/cadastrar")
-    public ModelAndView cadastrar() {
+    public ModelAndView cadastrar(Causa causa) {
        ModelAndView modelAndView = new ModelAndView("/cadastrar");
 
       return modelAndView;
@@ -112,7 +112,7 @@ public class CausaController {
 
     @GetMapping("/{id}/editar")
     public ModelAndView editar(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("causas/formulario");
+        ModelAndView modelAndView = new ModelAndView("/cadastrar");
 
         modelAndView.addObject("Causa", causaRepositorio.getOne(id));
         modelAndView.addObject("ufs", UF.values());
@@ -121,20 +121,23 @@ public class CausaController {
     }
 
     @PostMapping("/cadastrar")
-	public ModelAndView cadastrar(Causa causa, @RequestParam("file1" +"file2") MultipartFile file) throws IOException {
+	public ModelAndView cadastrarImagem(Causa causa, @RequestParam ("file") MultipartFile file) throws IOException {
     	String senhaEncriptada = SenhaUtils.encode(causa.getSenha());
     	
 		try {
 			causa.setImagem1(file.getBytes());
-			causa.setImagem2(file.getBytes());
+			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		ModelAndView modelAndView = new ModelAndView("redirect:/causasDetalhes");
 		
+		modelAndView.addObject("causa", new Causa());
+        modelAndView.addObject("ufs", UF.values());
 		causa.setSenha(senhaEncriptada);
         causaRepositorio.save(causa);
-		ModelAndView modelAndView = new ModelAndView("redirect:/causasDetalhes");
+		
 
 		return modelAndView;
 	}

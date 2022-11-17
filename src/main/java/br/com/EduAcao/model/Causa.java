@@ -26,7 +26,7 @@ public class Causa extends Entidade {
 	@Column(nullable = false, length = 80)
     private String razaoSocia;
 
-    @Column(nullable = false, length = 14, unique = true)
+    @Column(nullable = true)
     private String cnpj;
 
     @Column(nullable = false, length = 15)
@@ -39,7 +39,7 @@ public class Causa extends Entidade {
     @DateTimeFormat(iso = ISO.DATE)
     private LocalDate dataNascimento;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String sobre;
     
     @Lob
