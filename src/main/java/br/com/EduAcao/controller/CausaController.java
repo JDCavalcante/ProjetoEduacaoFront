@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import br.com.EduAcao.model.Administrador;
 import br.com.EduAcao.model.Causa;
+import br.com.EduAcao.model.Newsletter;
 import br.com.EduAcao.model.UF;
 import br.com.EduAcao.repositorios.CausaRepositorio;
+import br.com.EduAcao.repositorios.NewsletterRepositorio;
 import br.com.EduAcao.utils.SenhaUtils;
 
 
@@ -27,22 +30,25 @@ public class CausaController {
     @Autowired
     private CausaRepositorio causaRepositorio;
     
+    @Autowired
+    private NewsletterRepositorio newsletterRepositorio;
+    
     @GetMapping
-    public ModelAndView home() {
+    public ModelAndView home(Newsletter newsletter) {
         ModelAndView modelAndView = new ModelAndView("/index");
 
         return modelAndView;
     }
  
  @GetMapping ("/cadastrar")
-    public ModelAndView cadastrar(Causa causa) {
+    public ModelAndView cadastrar(Causa causa, Newsletter newsletter) {
        ModelAndView modelAndView = new ModelAndView("/cadastrar");
 
       return modelAndView;
     }
 
  @GetMapping("/sobre")
-    public ModelAndView sobre() {
+    public ModelAndView sobre(Newsletter newsletter) {
         ModelAndView modelAndView = new ModelAndView("/sobre");
 
 
@@ -50,7 +56,7 @@ public class CausaController {
     }
  
  @GetMapping("/causas")
-   public ModelAndView causas() {
+   public ModelAndView causas(Newsletter newsletter) {
        ModelAndView modelAndView = new ModelAndView("/causas");
 
 
@@ -58,7 +64,7 @@ public class CausaController {
    }
  
  @GetMapping("/causasDetalhes")
-    public ModelAndView causasDetalhes() {
+    public ModelAndView causasDetalhes(Newsletter newsletter) {
         ModelAndView modelAndView = new ModelAndView("/causasDetalhes");
 
 
@@ -66,7 +72,7 @@ public class CausaController {
     }
  
  @GetMapping("/contato")
-    public ModelAndView contato() {
+    public ModelAndView contato(Newsletter newsletter) {
         ModelAndView modelAndView = new ModelAndView("/contato");
 
 
@@ -74,7 +80,7 @@ public class CausaController {
     }
  
  @GetMapping("/galeria")
-    public ModelAndView promocoes() {
+    public ModelAndView promocoes(Newsletter newsletter) {
         ModelAndView modelAndView = new ModelAndView("/galeria");
 
 
@@ -82,7 +88,7 @@ public class CausaController {
     }
  
  @GetMapping("/login")
-    public ModelAndView login() {
+    public ModelAndView login(Newsletter newsletter) {
         ModelAndView modelAndView = new ModelAndView("/login");
 
 
@@ -118,6 +124,15 @@ public class CausaController {
         modelAndView.addObject("ufs", UF.values());
 
         return modelAndView;
+    }
+    
+    @PostMapping("/")
+    public String cadastrar( Newsletter newsletter) {
+    	 ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("newsletter", new Newsletter());
+        newsletterRepositorio.save(newsletter);
+
+        return "redirect:/";
     }
 
     @PostMapping("/cadastrar")
